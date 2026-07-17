@@ -1,0 +1,14 @@
+advisor_model: openai/gpt-5
+batch_size: 16
+dataset: blanchon/EuroSAT_RGB
+freeze_backbone: false
+learning_rate: 2.0e-05
+max_claude_calls: 100
+min_delta: 0.005
+model: google/vit-base-patch16-224
+num_classes: 10
+num_epochs: 15
+plateau_window: 2
+target_f1: 0.95
+warmup_steps: 100
+weight_decay: 0.01
