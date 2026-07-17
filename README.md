@@ -99,7 +99,3 @@ Training runs in the `training` service. MLflow server runs in the `mlflow` serv
 3. The **Metrics** tab shows `f1_macro`, `train_loss`, `learning_rate`, and `claude_tokens_used` plotted per epoch — a spike in `claude_tokens_used` marks when Claude was called
 4. Epochs where `claude_suggested = 1.0` show which hyperparameter changes came from Claude
 5. The **Artifacts** tab contains the best checkpoint saved under `best_model/`
-
-## Connection to Satellite Change Detection
-
-This project is the foundation for a larger open-source satellite change detection pipeline. The ViT backbone fine-tuned here on EuroSAT land cover classes (Sentinel-2 imagery) becomes the feature extractor in a change detection model that compares two time-series satellite images. The MLflow experiment structure, Docker setup, and adaptive loop pattern established here carry directly into that follow-on project — arriving there with a trained Sentinel-2 vision model, a working experiment tracking setup, and the loop engineering pattern already in place.
