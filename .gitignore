@@ -132,3 +132,7 @@ temp/
 *.orig
 .python-version
 .direnv/
+
+# --- Local docs (articles, notes — not for public repo) ---
+ARTICLE.md
+LOOP_ENGINEERING.md

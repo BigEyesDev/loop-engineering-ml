@@ -3,6 +3,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import argparse
+import copy
 import torch
 import mlflow
 import mlflow.pytorch
@@ -119,6 +120,7 @@ def main():
     epoch_history_for_claude = []
     claude_call_count = 0
     best_f1 = -1.0
+    best_model_state = None
 
     with mlflow.start_run(run_name=run_name):
         mlflow.log_params({
@@ -205,16 +207,17 @@ def main():
 
             if metrics["f1_macro"] > best_f1:
                 best_f1 = metrics["f1_macro"]
-                mlflow.pytorch.log_model(
-                    model,
-                    name="best_model",
-                    serialization_format="pickle",
-                )
-                print(f"  New best F1: {best_f1:.4f} — model artifact saved")
+                best_model_state = copy.deepcopy(model.state_dict())
+                print(f"  New best F1: {best_f1:.4f}")
 
             if not smoke_test and metrics["f1_macro"] >= base_config["target_f1"]:
                 print(f"  Target F1 {base_config['target_f1']} reached. Stopping.")
                 break
+
+        if best_model_state is not None:
+            model.load_state_dict(best_model_state)
+            mlflow.pytorch.log_model(model, name="best_model", serialization_format="pickle")
+            print(f"Best model (F1={best_f1:.4f}) saved as MLflow artifact.")
 
         grid_path = save_prediction_grid(
             model, val_split, build_image_transforms(), device, EUROSAT_CLASS_NAMES
